@@ -154,3 +154,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Or for development, allow all:
 CORS_ALLOW_ALL_ORIGINS = True
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+}
