@@ -32,9 +32,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'messaging',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -133,3 +136,12 @@ CHANNEL_LAYERS = {
     }
 }
 """
+# settings.py
+CORS_ALLOWED_ORIGINS = [
+    "https://6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovableproject.com",
+    'localhost',
+    '127.0.0.1'
+]
+
+# Or for development, allow all:
+CORS_ALLOW_ALL_ORIGINS = True
