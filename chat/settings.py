@@ -139,8 +139,8 @@ CHANNEL_LAYERS = {
 # settings.py
 CORS_ALLOWED_ORIGINS = [
     "https://6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovableproject.com",
-    'localhost',
-    '127.0.0.1'
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 
 # Or for development, allow all:
