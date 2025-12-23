@@ -138,10 +138,19 @@ CHANNEL_LAYERS = {
 """
 # settings.py
 CORS_ALLOWED_ORIGINS = [
-    "https://6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovableproject.com",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+  "https://id-preview--6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovable.app",
+  "https://6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovableproject.com",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+  "https://id-preview--6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovable.app",
+  "https://6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovableproject.com",
+]
+
 
 # Or for development, allow all:
 CORS_ALLOW_ALL_ORIGINS = True
