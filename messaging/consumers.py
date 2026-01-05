@@ -3,6 +3,7 @@ from accounts.models import User
 from channels.db import database_sync_to_async
 import json
 from .models import Message
+from uuid import UUID
 
 def get_thread_name(user1_id, user2_id):
     ids = sorted([str(user1_id), str(user2_id)])
@@ -21,8 +22,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return
         
         try:
-            other_user_id = self.scope["url_route"]["kwargs"]["room_name"]
-            self.other_user = await database_sync_to_async(User.objects.get)(id=other_user_id)
+            other_user_uuid = self.scope["url_route"]["kwargs"]["room_name"]
+            # Convert string to UUID object
+            self.other_user = await database_sync_to_async(
+                lambda: User.objects.get(uuid=UUID(other_user_uuid))
+            )()
         except (ValueError, User.DoesNotExist):
             await self.close()
             return
