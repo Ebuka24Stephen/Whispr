@@ -1,16 +1,22 @@
-Django==4.2.10
+Django==4.2
 
+# ASGI + WebSockets
 channels==3.0.5
-daphne==4.0.0
+daphne==3.0.0
 channels-redis==4.1.0
 redis==5.0.1
 
+# REST & Auth
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.3.1
 
+# CORS
 django-cors-headers==4.3.1
 
-psycopg2-binary==2.9.9
+# Database
+psycopg2-binary==2.9.11
+
+# Utils
 python-decouple==3.8
-requests==2.31.0
-ujson==5.9.0
+requests==2.32.5
+ujson==5.11.0
