@@ -1,5 +1,5 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
-from accounts.models import User
+from django.contrib.auth import get_user_model
 from channels.db import database_sync_to_async
 import json
 from .models import Message
@@ -10,24 +10,27 @@ def get_thread_name(user1_id, user2_id):
     return f"private_chat_{ids[0]}_{ids[1]}"
 
 
+@database_sync_to_async
+def get_user_by_id(user_id):
+    User = get_user_model()
+    return User.objects.get(id=user_id)
+
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
-    thread_name = None 
+    thread_name = None
     other_user = None
 
     async def connect(self):
-        user = self.scope['user']
+        user = self.scope["user"]
         if user.is_anonymous:
             await self.close()
             return
-        
+
         try:
-            other_user_uuid = self.scope["url_route"]["kwargs"]["room_name"]
-            # Convert string to UUID object
-            self.other_user = await database_sync_to_async(
-                lambda: User.objects.get(uuid=UUID(other_user_uuid))
-            )()
-        except (ValueError, User.DoesNotExist):
+            other_user_id = UUID(self.scope["url_route"]["kwargs"]["room_name"])
+            self.other_user = await get_user_by_id(other_user_id)
+        except Exception:
             await self.close()
             return
 
@@ -42,35 +45,39 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         if not text_data:
             return
+
         try:
             data = json.loads(text_data)
         except json.JSONDecodeError:
             return
-        content = data.get('content')
+
+        content = data.get("content")
         if not content:
             return
+
         message = await self.save_message(content)
 
-        payload = {
-            'type': 'chat_message',
-            'message': {
-                'id': message.id,
-                'content': message.content,
-                'sender_id': message.sender.id if message.sender else None,
-                'recipient_id': message.recipient.id if message.recipient else None,
-                'timestamp': message.timestamp.isoformat() if getattr(message, 'timestamp', None) else None,
-            }
-        }
-        await self.channel_layer.group_send(self.thread_name, payload)
+        await self.channel_layer.group_send(
+            self.thread_name,
+            {
+                "type": "chat_message",
+                "message": {
+                    "id": str(message.id),
+                    "content": message.content,
+                    "sender_id": str(message.sender_id),
+                    "recipient_id": str(message.recipient_id),
+                    "timestamp": message.timestamp.isoformat(),
+                },
+            },
+        )
 
     @database_sync_to_async
     def save_message(self, content):
         return Message.objects.create(
             content=content,
             sender=self.scope["user"],
-            recipient=self.other_user
+            recipient=self.other_user,
         )
 
     async def chat_message(self, event):
-        # forward the message payload to WebSocket clients
-        await self.send(text_data=json.dumps(event['message']))
+        await self.send(text_data=json.dumps(event["message"]))
