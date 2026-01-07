@@ -1,11 +1,10 @@
 from django.db import models
 
-from accounts.models import User 
-
+from django.conf import settings
 
 class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='send_message')
-    recipient = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='receive_message')
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='send_message')
+    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='receive_message')
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 

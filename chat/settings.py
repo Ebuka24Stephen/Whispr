@@ -136,15 +136,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-"""
 
-#FOR TESTING
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
-"""
 # settings.py
 CORS_ALLOWED_ORIGINS = [
   "https://id-preview--6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovable.app",
