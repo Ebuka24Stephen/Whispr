@@ -152,6 +152,7 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
   "https://id-preview--6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovable.app",
   "https://6e24c7cc-fe7e-4bdf-815a-ad71f4074eda.lovableproject.com",
+  "https://whispr-mpsv.onrender.com"
 ]
 
 
