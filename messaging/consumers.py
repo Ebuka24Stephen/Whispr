@@ -47,7 +47,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         print(f"WS connection accepted: {self.user} <-> {self.other_user}")
 
     async def disconnect(self, code):
-        if self.thread_name:
+        if hasattr(self, "thread_name") and self.thread_name:
             await self.channel_layer.group_discard(self.thread_name, self.channel_name)
         print(f"WS disconnected: {self.user} <-> {self.other_user}")
 
